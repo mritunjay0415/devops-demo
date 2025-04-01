@@ -1,0 +1,47 @@
+---
+- name: Deploy Nginx on MicroK8s
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Deploy Nginx on MicroK8s
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: nginx
+            namespace: devops-demo
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: nginx
+            template:
+              metadata:
+                labels:
+                  app: nginx
+              spec:
+                containers:
+                  - name: nginx
+                    image: nginx
+                    ports:
+                      - containerPort: 80
+
+    - name: Expose Nginx as a Service
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: nginx-service
+            namespace: devops-demo
+          spec:
+            selector:
+              app: nginx
+            ports:
+              - protocol: TCP
+                port: 80
+                targetPort: 80
+            type: NodePort
