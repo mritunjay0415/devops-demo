@@ -6,4 +6,8 @@ resource "kubernetes_namespace" "demo_ns" {
   metadata {
     name = "devops-demo"
   }
+
+  lifecycle {
+    ignore_changes = [metadata]
+  }
 }
