@@ -7,7 +7,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the code from the GitHub repository
-                git 'https://github.com/mritunjay0415/Demo1.git'
+                git 'https://github.com/mritunjay0415/devops-demo.git'
             }
         }
         stage('Terraform Apply') {
