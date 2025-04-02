@@ -1,19 +1,20 @@
 pipeline {
     agent any
     environment {
-        KUBECONFIG = "~/.kube/config"  // Set the Kubernetes config file path
+        KUBECONFIG = "~/.kube/config"
     }
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the GitHub repository
-                git 'https://github.com/mritunjay0415/devops-demo.git'
+                checkout([$class: 'GitSCM', 
+                    branches: [[name: '*/main']], 
+                    userRemoteConfigs: [[url: 'https://github.com/mritunjay0415/devops-demo.git']]
+                ])
             }
         }
         stage('Terraform Apply') {
             steps {
                 script {
-                    // Initialize Terraform and apply changes
                     sh '''
                     terraform init
                     terraform apply -auto-approve
@@ -24,7 +25,6 @@ pipeline {
         stage('Ansible Deploy') {
             steps {
                 script {
-                    // Run the Ansible playbook to deploy Nginx
                     sh '''
                     ansible-playbook -i inventory deploy.yaml
                     '''
@@ -34,7 +34,6 @@ pipeline {
     }
     post {
         always {
-            // Clean up or notify after the job
             echo 'Job finished'
         }
     }
