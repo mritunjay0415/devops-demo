@@ -1,5 +1,5 @@
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = "/var/lib/jenkins/.kube/config"
 }
 
 resource "kubernetes_namespace" "demo_ns" {
